@@ -27,6 +27,5 @@ SignIn.js
 SIgnUp.js
 Navbar.js
 AuthProvider.js
-firebase.config.js
 Routes.js
 
