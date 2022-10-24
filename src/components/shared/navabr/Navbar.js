@@ -1,10 +1,32 @@
 import React, { useContext, useState } from 'react';
+import { FaMoon, FaSun, FaUserAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { FaLock, FaUserAlt } from 'react-icons/fa';
 import logo from '../../../assets/Images/Learners.png'
+import { AuthContext } from '../../../context/AuthProvider/AuthProvider';
 
 const Navbar = () => {
     const [navbar, setNavbar] = useState(false);
+    const { user, logOut } = useContext(AuthContext);
+    const handleSignOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => console.error(error))
+    }
+
+    const [value, setValue] = useState(true)
+    const handleValue = (event) => {
+        if (value === true) {
+            event.target.value = false
+            setValue(event.target.value);
+
+        }
+        else {
+            event.target.value = true
+            setValue(event.target.value);
+        }
+
+
+    }
     return (
         <nav className="w-full bg-gray-200">
             <div className="md:flex items-center justify-between mx-5">
@@ -47,21 +69,42 @@ const Navbar = () => {
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
                                 Blog
                             </li>
-                            <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                <Link to='/register'> Sign Up</Link>
-                            </li>
-                            <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                <Link to='/login'>Sign In</Link>
-                            </li>
-                            <button></button>
-                            <div className="tooltip tooltip-bottom" data-tip="Person">
-                                <img className="w-10 rounded-full" src="https://placeimg.com/80/80/people" alt='' />
-                            </div>
+                            {
+                                user?.uid ?
+                                    <>
+                                        <button className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700" onClick={handleSignOut}>Sign Out</button>
+                                        <div className="tooltip tooltip-bottom" data-tip={user?.displayName}>
+                                            {
+                                                user?.uid ?
+                                                    <img className="w-10 rounded-full" src={user?.photoURL} alt='' /> :
+                                                    <FaUserAlt className='bg-blue-500' />
+                                            }
+                                        </div></>
+                                    :
+                                    <>
+                                        <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
+                                            <Link to='/register'> Sign Up</Link>
+                                        </li>
+                                        <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
+                                            <Link to='/login'>Sign In</Link>
+                                        </li>
+                                    </>
+                            }
+                            <button onClick={handleValue}>{
+                                value ?
+                                    <div className="tooltip tooltip-bottom" data-tip="Dark" >
+                                        <FaMoon />
+                                    </div>
+                                    :
+                                    <div className="tooltip tooltip-bottom" data-tip="Light">
+                                        <FaSun />
+                                    </div>
+                            }</button>
                         </ul>
                     </div>
                 </div>
             </div>
-        </nav>
+        </nav >
     );
 };
 

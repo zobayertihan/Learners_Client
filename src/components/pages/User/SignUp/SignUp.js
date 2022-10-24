@@ -1,21 +1,25 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle, } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { AuthContext } from '../../../../context/AuthProvider/AuthProvider';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
 
 
 const SignUp = () => {
-    const { createUser, providerLogin } = useContext(AuthContext);
-    const [error, setError] = useState('')
+    const { createUser, providerLogin, verifyEmail, updateUserProfile } = useContext(AuthContext);
+    const [error, setError] = useState('');
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
+    const navigate = useNavigate();
+
     const handleGoogleSignIn = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
-                console.log(user)
+                console.log(user);
+                navigate('/');
             })
             .catch(error => console.error(error))
     }
@@ -23,10 +27,30 @@ const SignUp = () => {
         providerLogin(githubProvider)
             .then(result => {
                 const user = result.user;
-                console.log(user)
+                console.log(user);
+                navigate('/');
             })
             .catch(error => console.error(error))
     }
+
+    const handleEmailVerification = () => {
+        verifyEmail()
+            .then(() => {
+
+            })
+            .catch(e => console.error(e))
+    }
+
+    const handleUpdateUserProfile = (name, photoUrl) => {
+        const profile = {
+            displayName: name,
+            photoURL: photoUrl
+        }
+        updateUserProfile(profile)
+            .then(() => { })
+            .catch(error => console.error(error))
+    }
+
     const handleSubmit = event => {
         event.preventDefault();
         const form = event.target;
@@ -39,7 +63,12 @@ const SignUp = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
-                setError('')
+                setError('');
+                handleUpdateUserProfile(name, photoURL);
+                handleEmailVerification();
+                toast.success('Account Created Successfully. Please Verify your Email.');
+                form.reset();
+                navigate('/');
             })
             .catch(e => setError(e.message));
     }

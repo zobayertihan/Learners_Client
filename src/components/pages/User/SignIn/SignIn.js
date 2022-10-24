@@ -1,19 +1,35 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FcGoogle, } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { AuthContext } from '../../../../context/AuthProvider/AuthProvider';
-import { GoogleAuthProvider } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
-    const { loginUser, providerLogin } = useContext(AuthContext);
+    const { loginUser, providerLogin, setLoading } = useContext(AuthContext);
     const [error, setError] = useState('');
+    const location = useLocation();
+    const from = location?.state?.from?.pathname || '/';
+    const navigate = useNavigate();
     const googleProvider = new GoogleAuthProvider();
+    const githubProvider = new GithubAuthProvider();
     const handleGoogleSignIn = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
-                console.log(user)
+                console.log(user);
+                navigate(from, { replace: true });
+            })
+            .catch(error => console.error(error))
+    }
+
+    const handleGithubSignIn = () => {
+        providerLogin(githubProvider)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                navigate(from, { replace: true });
             })
             .catch(error => console.error(error))
     }
@@ -28,9 +44,20 @@ const SignIn = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
-                setError('')
+                setError('');
+                form.reset();
+                if (user.emailVerified) {
+                    navigate(from, { replace: true });
+                }
+                else {
+                    toast.error('Your Email is not verified.')
+                }
+
             })
             .catch(e => setError(e.message))
+            .finally(() => {
+                setLoading(false);
+            })
     }
     return (
         <div className='h-full w-screen flex justify-center mt-6'>
@@ -62,7 +89,7 @@ const SignIn = () => {
                 <p>Continue with: </p>
                 <div className='flex justify-around mt-2'>
                     <button onClick={handleGoogleSignIn}><FcGoogle className='h-8 w-8' /></button>
-                    <button><FaGithub className='h-8 w-8' /></button>
+                    <button onClick={handleGithubSignIn}><FaGithub className='h-8 w-8' /></button>
                 </div>
             </div>
         </div>
