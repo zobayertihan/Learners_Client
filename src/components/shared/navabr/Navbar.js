@@ -61,7 +61,7 @@ const Navbar = () => {
                     >
                         <ul className="text-md text-center text-black font-semibold items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                Courses
+                                <Link to={'/courses'}>Courses</Link>
                             </li>
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
                                 FAQ
