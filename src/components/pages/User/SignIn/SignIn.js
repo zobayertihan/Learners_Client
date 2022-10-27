@@ -4,7 +4,6 @@ import { FcGoogle, } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { AuthContext } from '../../../../context/AuthProvider/AuthProvider';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
-import toast from 'react-hot-toast';
 
 const SignIn = () => {
     const { loginUser, providerLogin, setLoading } = useContext(AuthContext);
@@ -46,12 +45,7 @@ const SignIn = () => {
                 console.log(user);
                 setError('');
                 form.reset();
-                if (user.emailVerified) {
-                    navigate(from, { replace: true });
-                }
-                else {
-                    toast.error('Your Email is not verified.')
-                }
+                navigate(from, { replace: true });
 
             })
             .catch(e => setError(e.message))

@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 
 
 const SignUp = () => {
-    const { createUser, providerLogin, verifyEmail, updateUserProfile } = useContext(AuthContext);
+    const { createUser, providerLogin, updateUserProfile, } = useContext(AuthContext);
     const [error, setError] = useState('');
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
@@ -33,13 +33,6 @@ const SignUp = () => {
             .catch(error => console.error(error))
     }
 
-    const handleEmailVerification = () => {
-        verifyEmail()
-            .then(() => {
-
-            })
-            .catch(e => console.error(e))
-    }
 
     const handleUpdateUserProfile = (name, photoUrl) => {
         const profile = {
@@ -47,7 +40,8 @@ const SignUp = () => {
             photoURL: photoUrl
         }
         updateUserProfile(profile)
-            .then(() => { })
+            .then(() => {
+            })
             .catch(error => console.error(error))
     }
 
@@ -65,8 +59,7 @@ const SignUp = () => {
                 console.log(user);
                 setError('');
                 handleUpdateUserProfile(name, photoURL);
-                handleEmailVerification();
-                toast.success('Account Created Successfully. Please Verify your Email.');
+                toast.success('Account Created Successfully.');
                 form.reset();
                 navigate('/');
             })

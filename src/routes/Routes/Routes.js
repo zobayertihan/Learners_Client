@@ -1,9 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import CourseMain from "../../components/layout/CourseMain";
 import Main from "../../components/layout/Main";
+import Blog from "../../components/pages/Blog/Blog";
 import Checkout from "../../components/pages/checkout/Checkout";
 import Course from "../../components/pages/course/Course";
 import Courses from "../../components/pages/Courses/Courses";
+import ErrorPage from "../../components/pages/ErrorPage/ErrorPage";
 import Home from "../../components/pages/Home/Home";
 import SignIn from "../../components/pages/User/SignIn/SignIn";
 import SignUp from "../../components/pages/User/SignUp/SignUp";
@@ -13,10 +15,12 @@ export const routes = createBrowserRouter([
     {
         path: '/',
         element: <Main></Main>,
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
             {
                 path: '/',
                 element: <Home></Home>,
+                errorElement: <ErrorPage></ErrorPage>,
                 loader: () => fetch(`https://server-zobayertihan.vercel.app/courses`)
             },
             {
@@ -48,6 +52,10 @@ export const routes = createBrowserRouter([
                 element: <PrivateRoute><Checkout></Checkout></PrivateRoute>,
                 loader: ({ params }) => fetch(`https://server-zobayertihan.vercel.app/course/${params.id}`)
 
+            },
+            {
+                path: '/blog',
+                element: <Blog></Blog>
             }
         ]
     }

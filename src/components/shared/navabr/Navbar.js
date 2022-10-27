@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { FaMoon, FaSun, FaUserAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import logo from '../../../assets/Images/Learners.png'
 import { AuthContext } from '../../../context/AuthProvider/AuthProvider';
 
 const Navbar = () => {
+    const active = "bg-gray-400 px-5 py-2";
+    const normal = "";
     const [navbar, setNavbar] = useState(false);
     const { user, logOut } = useContext(AuthContext);
     const handleSignOut = () => {
@@ -24,8 +26,6 @@ const Navbar = () => {
             event.target.value = true
             setValue(event.target.value);
         }
-
-
     }
     return (
         <nav className="w-full bg-gray-200">
@@ -61,45 +61,52 @@ const Navbar = () => {
                     >
                         <ul className="text-md text-center text-black font-semibold items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                <Link to={'/courses'}>Courses</Link>
+                                <NavLink className={({ isActive }) => isActive ? active : normal} to={'/courses'}>Courses</NavLink>
                             </li>
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                FAQ
+                                <NavLink className={({ isActive }) => isActive ? active : normal} to={'/faq'}>FAQ</NavLink>
                             </li>
                             <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                Blog
+                                <NavLink className={({ isActive }) => isActive ? active : normal} to={'/blog'}>Blog</NavLink>
                             </li>
                             {
                                 user?.uid ?
                                     <>
-                                        <button className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700" onClick={handleSignOut}>Sign Out</button>
-                                        <div className="tooltip tooltip-bottom" data-tip={user?.displayName}>
-                                            {
-                                                user?.uid ?
-                                                    <img className="w-10 rounded-full" src={user?.photoURL} alt='' /> :
-                                                    <FaUserAlt className='bg-blue-500' />
-                                            }
-                                        </div></>
+                                        <li>
+                                            <button className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700" onClick={handleSignOut}>Sign Out</button>
+                                        </li>
+                                        <li>
+                                            <div className="tooltip tooltip-bottom" data-tip={user?.displayName}>
+                                                {
+                                                    user?.uid ?
+                                                        <img className="w-10 rounded-full" src={user?.photoURL} alt='' /> :
+                                                        <FaUserAlt className='bg-blue-500' />
+                                                }
+                                            </div>
+                                        </li>
+                                    </>
                                     :
                                     <>
                                         <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                            <Link to='/register'> Sign Up</Link>
+                                            <NavLink className={({ isActive }) => isActive ? active : normal} to={'/register'}>Sign Up</NavLink>
                                         </li>
                                         <li className="hover:text-violet-600 hover:underline hover:underline-offset-4 transition duration-700">
-                                            <Link to='/login'>Sign In</Link>
+                                            <NavLink className={({ isActive }) => isActive ? active : normal} to={'/login'}>Sign In</NavLink>
                                         </li>
                                     </>
                             }
-                            <button onClick={handleValue}>{
-                                value ?
-                                    <div className="tooltip tooltip-bottom" data-tip="Dark" >
-                                        <FaMoon />
-                                    </div>
-                                    :
-                                    <div className="tooltip tooltip-bottom" data-tip="Light">
-                                        <FaSun />
-                                    </div>
-                            }</button>
+                            <li>
+                                <button onClick={handleValue}>{
+                                    value ?
+                                        <div className="tooltip tooltip-bottom" data-tip="Dark" >
+                                            <FaMoon />
+                                        </div>
+                                        :
+                                        <div className="tooltip tooltip-bottom" data-tip="Light">
+                                            <FaSun />
+                                        </div>
+                                }</button>
+                            </li>
                         </ul>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ const Courses = () => {
             {
                 courses.map(course =>
                     <div key={course.id}>
-                        <div className="flex flex-col items-center justify-center bg-white p-4 shadow rounded-lg">
+                        <div className="flex flex-col items-center justify-center bg-white p-4 shadow rounded-lg hover:-translate-y-2" >
                             <div className="inline-flex shadow-lg border border-gray-200 rounded-full overflow-hidden h-40 w-40">
                                 <img src={course.image}
                                     alt=""

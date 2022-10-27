@@ -4,11 +4,11 @@ import LeftNav from '../shared/leftNav/LeftNav';
 
 const CourseMain = () => {
     return (
-        <div className='flex flex-row'>
-            <div className='w-3/12'>
+        <div className='flex md:flex-row flex-col'>
+            <div className='md:w-3/12 flex justify-center'>
                 <LeftNav ></LeftNav>
             </div>
-            <div className='w-9/12'>
+            <div className='md:w-9/12'>
                 <Outlet ></Outlet>
             </div>
         </div>
